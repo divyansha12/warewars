@@ -107,3 +107,9 @@ InitTestScene*.unity*
 
 # Auto-generated cache in Assets folder
 /[Aa]ssets/[Ss]ceneDependencyCache*
+
+# ML-Agents training output (final model is copied to models/)
+results/
+
+# macOS
+.DS_Store
