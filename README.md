@@ -2,8 +2,8 @@
 
 A robot in a simulated Unity warehouse that learns on its own to pick up packages and deliver them to a drop zone. Built by **Divyansha Singh** for my SWAYAM course project (Unity, C# and reinforcement learning).
 
-![Demo](docs/demo.mov)
-> Demo video: `docs/demo.mov` (trained PPO robot delivering packages, no human control)
+![Demo](docs/demo.gif)
+> Trained PPO robot delivering packages with no human control. Full video: [docs/demo.mov](docs/demo.mov)
 
 ## What it does
 - Warehouse built in Unity with C# scripts for movement, pickup and scoring
@@ -30,13 +30,13 @@ I recorded my own demonstration (about 900 steps, 3 episodes) and added behavior
 
 ![Losses](docs/losses.png)
 
-- The imitation losses went down, so the agent did learn to copy the demo.
+- The behavioral cloning (pretraining) loss dropped to almost zero, so the policy fit the small demo. The GAIL loss also fell, but that means the discriminator got better at telling the agent apart from the demo, so it is not a sign of good imitation.
 - But it never learned to deliver. Reward stayed around -2 to -4.
 - **Hypothesis:** the demo was too small (about 900 steps). Imitation gave a weak signal that got in the way of PPO finding the delivery loop by itself. A longer demo (5,000+ steps) is the next thing to try.
 
 ## What failed and how I fixed it
-- **Torch version mismatch / crash on startup:** pinned a compatible torch version for ML-Agents.
-- **StrictVersion error:** fixed by using compatible package versions.
+- **Model export failed (`No module named onnxscript`):** `mlagents` 1.1.0 accepts any torch version, so pip installed a very new one whose ONNX exporter needs extra packages. Pinned `torch==2.2.2`.
+- **`StrictVersion` crash during training:** a symptom of Unity pausing when its window lost focus. Turning on Run In Background fixed it.
 - **UnityTimeOutException:** Unity was not sending data to the trainer. Fixed by turning on Run In Background and keeping Unity in front after pressing Play.
 - **Imitation runs failed to learn:** see the section above.
 
@@ -64,4 +64,4 @@ Before using PPO, I built a small tabular Q-learning agent on a 5x5 grid warehou
 | First 100 | -5.18 |
 | Last 100 | **+9.94** |
 
-Q-learning solves the small grid with a lookup table. In the full Unity warehouse the state space is too big for a table, so I used PPO, a neural-network method. I also tested imitation learning on top. So the project compares **Q-learning, then PPO, then imitation learning**.
+Q-learning solves the small grid with a lookup table. In the full Unity warehouse the state space is too big for a table, so I used PPO, a neural-network method. I also tested imitation learning on top. These numbers come from a simplified 5x5 grid with its own reward setup, so they are not directly comparable to the PPO results in the 10x10 Unity warehouse. The Q-learning agent shows the idea from the course before moving to PPO and imitation learning.
