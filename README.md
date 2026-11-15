@@ -64,4 +64,4 @@ Before using PPO, I built a small tabular Q-learning agent on a 5x5 grid warehou
 | First 100 | -5.18 |
 | Last 100 | **+9.94** |
 
-Q-learning solves the small grid with a lookup table. In the full Unity warehouse the state space is too big for a table, so I used PPO, a neural-network method. I also tested imitation learning on top. These numbers come from a simplified 5x5 grid with its own reward setup, so they are not directly comparable to the PPO results in the 10x10 Unity warehouse. The Q-learning agent shows the idea from the course before moving to PPO and imitation learning.
+These numbers come from a simplified 5x5 grid with its own reward setup, so they are not directly comparable to the PPO results in the 10x10 Unity warehouse. The Q-learning agent shows the lookup-table idea from the course. A table would probably also work on the Unity grid, because it has few states. I used PPO there because it is what ML-Agents trains, and it scales to richer observations. I then tested imitation learning on top of PPO.
